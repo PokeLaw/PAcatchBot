@@ -7,7 +7,9 @@ import json
 import os
 import time
 
-TOKEN = "8971689391:AAHgTY0oDTI5bTPp1ByPgH8rlhsgMPfUsKA"
+import os
+
+TOKEN = os.getenv("TOKEN")
 
 current_pokemon = None
 current_pokemon_image = None
