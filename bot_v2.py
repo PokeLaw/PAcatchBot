@@ -86,23 +86,23 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 async def spawn(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    global current_pokemon
-    global current_pokemon_image
-    global current_is_shiny
-    global pokemon_spawn_time
+global current_pokemon
+global current_pokemon_image
+global current_is_shiny
+global pokemon_spawn_time
 
-    pokemon_id = random.randint(1, 151)
-    current_is_shiny = genera_shiny()
+pokemon_id = random.randint(1, 151)
+current_is_shiny = genera_shiny()
 
-    if current_is_shiny:
-        artwork = f"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/{pokemon_id}.png"
-    else:
-        artwork = f"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/{pokemon_id}.png"
+if current_is_shiny:
+    artwork = f"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/{pokemon_id}.png"
+else:
+    artwork = f"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/{pokemon_id}.png"
 
-    img_data = requests.get(artwork).content
+img_data = requests.get(artwork).content
 
-    with open("pokemon.png", "wb") as h:
-        h.write(img_data)
+with open("pokemon.png", "wb") as h:
+    h.write(img_data)
 
 pokemon_data = requests.get(
     f"https://pokeapi.co/api/v2/pokemon/{pokemon_id}"
@@ -112,26 +112,28 @@ current_pokemon = pokemon_data["name"].lower()
 pokemon_spawn_time = time.time()
 current_pokemon_image = "pokemon.png"
 
-    img = Image.open("pokemon.png").convert("RGBA")
-    pixels = img.load()
+img = Image.open("pokemon.png").convert("RGBA")
+pixels = img.load()
 
-    for y in range(img.height):
-        for x in range(img.width):
-            r, g, b, a = pixels[x, y]
-            if a > 0:
-                pixels[x, y] = (0, 0, 0, 255)
+for y in range(img.height):
+    for x in range(img.width):
+        r, g, b, a = pixels[x, y]
 
-    img.save("silhouette.png")
+        if a > 0:
+            pixels[x, y] = (0, 0, 0, 255)
 
-    if current_is_shiny:
-        caption = "✨ Un Pokémon misterioso scintilla nell'oscurità... ✨\n\nScrivi /cattura NomePokemon"
-    else:
-        caption = "🐾 Un Pokémon selvatico è apparso!\n\nScrivi /cattura NomePokemon"
+img.save("silhouette.png")
 
-    await update.message.reply_photo(
-        photo=open("silhouette.png", "rb"),
-        caption=caption
-    )
+if current_is_shiny:
+    caption = "✨ Un Pokémon misterioso scintilla nell'oscurità... ✨\n\nScrivi /cattura NomePokemon"
+else:
+    caption = "🐾 Un Pokémon selvatico è apparso!\n\nScrivi /cattura NomePokemon"
+
+await update.message.reply_photo(
+    photo=open("silhouette.png", "rb"),
+    caption=caption
+)
+
 
 async def auto_spawn(context: ContextTypes.DEFAULT_TYPE):
 
