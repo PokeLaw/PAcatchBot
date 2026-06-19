@@ -1,4 +1,3 @@
-from datetime import datetime
 from telegram import Update
 from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
 from PIL import Image
@@ -12,10 +11,6 @@ import os
 
 TOKEN = os.getenv("TOKEN")
 
-GROUP_ID = -1003655667215
-TOPIC_ID = 6
-
-pokemon_spawn_time = None
 current_pokemon = None
 current_pokemon_image = None
 current_is_shiny = False
@@ -89,10 +84,6 @@ async def spawn(update: Update, context: ContextTypes.DEFAULT_TYPE):
     global current_pokemon
     global current_pokemon_image
     global current_is_shiny
-    global pokemon_spawn_time
-
-current_pokemon = pokemon_data["name"].lower()
-pokemon_spawn_time = time.time()
 
     pokemon_id = random.randint(1, 151)
     current_is_shiny = genera_shiny()
@@ -135,35 +126,6 @@ pokemon_spawn_time = time.time()
         caption=caption
     )
 
-async def auto_spawn(context: ContextTypes.DEFAULT_TYPE):
-
-    global current_pokemon
-    global pokemon_spawn_time
-
-    ora = datetime.now().hour
-
-    if ora < 6 or ora >= 24:
-        return
-
-    if current_pokemon is not None:
-
-        if pokemon_spawn_time is not None:
-
-            if time.time() - pokemon_spawn_time > 172800:
-
-                await context.bot.send_message(
-                    chat_id=GROUP_ID,
-                    message_thread_id=TOPIC_ID,
-                    text="💨 Il Pokémon si è allontanato..."
-                )
-
-                current_pokemon = None
-                pokemon_spawn_time = None
-
-        return
-
-    # per ora log di test
-    print("SPAWN AUTOMATICO")
 
 async def cattura(update: Update, context: ContextTypes.DEFAULT_TYPE):
     global current_pokemon
@@ -281,11 +243,4 @@ app.add_handler(CommandHandler("chatid", chatid))
 app.add_handler(CommandHandler("topicid", topicid))
 
 print("BOT AVVIATO")
-job_queue = app.job_queue
-
-job_queue.run_repeating(
-    auto_spawn,
-    interval=10800,
-    first=60
-)
 app.run_polling()
