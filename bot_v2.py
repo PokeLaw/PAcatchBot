@@ -86,10 +86,10 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 async def spawn(update: Update, context: ContextTypes.DEFAULT_TYPE):
-global current_pokemon
-global current_pokemon_image
-global current_is_shiny
-global pokemon_spawn_time
+    global current_pokemon
+    global current_pokemon_image
+    global current_is_shiny
+    global pokemon_spawn_time
 
 pokemon_id = random.randint(1, 151)
 current_is_shiny = genera_shiny()
