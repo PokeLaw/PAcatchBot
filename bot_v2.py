@@ -73,7 +73,7 @@ def ottieni_profilo(user_id):
 
 
 def genera_shiny():
-    return random.randint(1, 500) == 1
+    return random.randint(1, 10) == 1
 
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
