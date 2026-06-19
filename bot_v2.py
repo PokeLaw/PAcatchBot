@@ -122,14 +122,14 @@ for y in range(img.height):
         if a > 0:
             pixels[x, y] = (0, 0, 0, 255)
 
-img.save("silhouette.png")
+    img.save("silhouette.png")
 
-if current_is_shiny:
+    if current_is_shiny:
     caption = "✨ Un Pokémon misterioso scintilla nell'oscurità... ✨\n\nScrivi /cattura NomePokemon"
-else:
+    else:
     caption = "🐾 Un Pokémon selvatico è apparso!\n\nScrivi /cattura NomePokemon"
 
-await update.message.reply_photo(
+    await update.message.reply_photo(
     photo=open("silhouette.png", "rb"),
     caption=caption
 )
